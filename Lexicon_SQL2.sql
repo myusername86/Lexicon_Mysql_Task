@@ -50,6 +50,15 @@ select c.Name,c.Population,d.Population,d.Name from city c JOIN country d on c.C
 
 
 # 16: What names of the cities are in the same country as the city with a population of 122199 (excluding the that city itself)
+SELECT city.Name
+FROM city
+JOIN country ON city.CountryCode = country.Code
+WHERE city.CountryCode = (
+    SELECT city.CountryCode
+    FROM city
+    WHERE city.Population = 122199
+)
+AND city.Population != 122199;
 
 
 #
@@ -61,6 +70,15 @@ select c.Name,d.Code from city c JOIN country d on c.CountryCode=d.Code where d.
 select c.Name,d.Code from city c JOIN country d on c.CountryCode=d.Code where d.Capital=(select ID from city where Name='Yaren');
 
 # 19: What unique languages are spoken in the countries in the same region as the city named Riga
+SELECT DISTINCT cl.Language
+FROM countrylanguage cl
+JOIN country c ON cl.CountryCode = c.Code
+WHERE c.Region = (
+    SELECT c2.Region
+    FROM city ci
+    JOIN country c2 ON ci.CountryCode = c2.Code
+    WHERE ci.Name = 'Riga'
+);
 
 
 
